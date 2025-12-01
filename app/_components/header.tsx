@@ -8,6 +8,8 @@ import {
   Plus,
   LayoutDashboard,
 } from "lucide-react";
+import logo from "../../public/logo.png";
+import Image from "next/image";
 import Link from "next/link";
 export function Header() {
   return (
@@ -16,7 +18,9 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-linear-to-br from-primary to-secondary flex items-center justify-center">
-              <span className="text-2xl">L</span>
+              <span className="text-2xl">
+                <Image src={logo} alt="Logo do site" width={200} height={200} className="rounded-full"/>
+              </span>
             </div>
             <span className="text-2xl font-serif font-bold text-foreground">
               Media Pocket
@@ -32,7 +36,7 @@ export function Header() {
             </Link>
             <Link
               href="/movies"
-               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Film className="w-4 h-4" />
               <span>Filmes</span>
