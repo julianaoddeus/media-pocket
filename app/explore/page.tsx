@@ -1,3 +1,4 @@
+"use client";
 import { Tabs } from "@/components/ui/tabs";
 import { Header } from "../_components/header";
 import { TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";

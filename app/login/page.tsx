@@ -1,3 +1,5 @@
+"use client";
+import type React from "react";
 import { Header } from "../_components/header";
 import { Lock, LogIn, Mail } from "lucide-react";
 import {
@@ -69,20 +71,32 @@ export default function Login() {
 
                 {/* error */}
 
-                <Button type="submit" size="lg" className="w-full">Entrar</Button>
+                <Button type="submit" size="lg" className="w-full">
+                  Entrar
+                </Button>
 
                 <div>
-                  Não tem uma conta?{' '}
-                  <Link href="/register" className="text-primary hover:underline">Cadastre-se</Link>
+                  Não tem uma conta?{" "}
+                  <Link
+                    href="/register"
+                    className="text-primary hover:underline"
+                  >
+                    Cadastre-se
+                  </Link>
                 </div>
 
                 <div className="pt-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground text-center">
-                      Credenciais de teste: <br />
-                      Email: <span className="text-foreground font-mono">demo@example.com</span> <br />
-                      Senha: <span className="text-foreground font-mono">demo123</span>
-                    </p>
-                  </div>
+                  <p className="text-xs text-muted-foreground text-center">
+                    Credenciais de teste: <br />
+                    Email:{" "}
+                    <span className="text-foreground font-mono">
+                      demo@example.com
+                    </span>{" "}
+                    <br />
+                    Senha:{" "}
+                    <span className="text-foreground font-mono">demo123</span>
+                  </p>
+                </div>
               </form>
             </CardContent>
           </Card>

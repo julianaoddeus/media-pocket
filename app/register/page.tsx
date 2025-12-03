@@ -1,3 +1,4 @@
+"use client";
 import { Lock, Mail, User, UserPlus } from "lucide-react";
 import { Header } from "../_components/header";
 import {

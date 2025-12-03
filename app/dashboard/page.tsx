@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Header } from "../_components/header";
 import { Book, Film, TrendingUp, Tv } from "lucide-react";
