@@ -20,7 +20,7 @@ export function PrimarySection() {
                 <ArrowRight />
               </Button>
             </Link>
-            <Link href="/books">
+            <Link href="/explore">
               <Button
                 size="lg"
                 variant="outline"
