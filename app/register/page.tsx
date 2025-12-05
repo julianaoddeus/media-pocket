@@ -20,7 +20,7 @@ export default function Register() {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-md mx-auto">
           <div className="mb-8 text-center">
-            <div className="w-16 h-16 bo-linear-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-linear-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
               <UserPlus className="w-8 h-8 text-white" />
             </div>
             <h1 className="font-serif text-4xl font-bold text-foreground mb-2">
