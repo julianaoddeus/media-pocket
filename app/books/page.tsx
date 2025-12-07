@@ -25,25 +25,27 @@ export default async function Books() {
           </p>
         </div>
 
-        <div className="text-center py-16">
-          <p className="text-muted-foreground text-lg">
-            Nenhum livro encontrado. Adicione seu primeiro livro!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {books.map((book) => (
-            <MediaCard
-              key={book.id}
-              id={book.id}
-              title={book.title}
-              imageUrl={book.cover}
-              rating={book.rating}
-              subtitle={book.author}
-              href={`/movies/${book.id}`}
-            />
-          ))}
-        </div>
+        {books.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg">
+              Nenhum livro encontrado. Adicione seu primeiro livro!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {books.map((book) => (
+              <MediaCard
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                image={book.cover}
+                rating={book.rating}
+                subtitle={book.author}
+                href={`/movies/${book.id}`}
+              />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

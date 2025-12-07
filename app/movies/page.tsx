@@ -25,25 +25,27 @@ export default async function Movies() {
           </p>
         </div>
 
-        <div className="text-center py-16">
-          <p className="text-muted-foreground text-lg">
-            Nenhum filme encontrado. Adicione seu primeiro filme!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {movies.map((movie) => (
-            <MediaCard
-              key={movie.id}
-              id={movie.id}
-              title={movie.title}
-              imageUrl={movie.poster}
-              rating={movie.rating}
-              subtitle={movie.director}
-              href={`/movies/${movie.id}`}
-            />
-          ))}
-        </div>
+        {movies.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg">
+              Nenhum filme encontrado. Adicione seu primeiro filme!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {movies.map((movie) => (
+              <MediaCard
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                image={movie.poster}
+                rating={movie.rating}
+                subtitle={movie.director}
+                href={`/movies/${movie.id}`}
+              />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

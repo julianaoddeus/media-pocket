@@ -24,26 +24,27 @@ export default async function Animes() {
             Uma coleção dos melhores animes que já li
           </p>
         </div>
-
-        <div className="text-center py-16">
-          <p className="text-muted-foreground text-lg">
-            Nenhum anime encontrado. Adicione seu primeiro anime!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {animes.map((anime) => (
-            <MediaCard
-              key={anime.id}
-              id={anime.id}
-              title={anime.title}
-              imageUrl={anime.poster}
-              rating={anime.rating}
-              subtitle={`${anime.studio} • ${anime.episodes} episódios`}
-              href={`/animes/${anime.id}`}
-            />
-          ))}
-        </div>
+        {animes.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg">
+              Nenhum anime encontrado. Adicione seu primeiro anime!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {animes.map((anime) => (
+              <MediaCard
+                key={anime.id}
+                id={anime.id}
+                title={anime.title}
+                image={anime.poster}
+                rating={anime.rating}
+                subtitle={`${anime.studio} • ${anime.episodes} episódios`}
+                href={`/animes/${anime.id}`}
+              />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
