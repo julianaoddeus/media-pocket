@@ -1,11 +1,48 @@
-"use client"
+"use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Header } from "../_components/header";
 import { Book, Film, TrendingUp, Tv } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-client";
+import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
+  const { user, isLoading } = useAuth();
+  const [stats, useStat] = useState({
+    books: 0,
+    movies: 0,
+    animes: 0,
+    total: 0,
+  });
+
+  useEffect(() => {
+    if (!isLoading && !user) redirect("/login");
+  }, [user, isLoading]);
+
+  useEffect(() => {
+    const fetchStat = async () => {
+      const reponse = await fetch("/api/stats");
+      if (reponse.ok) {
+        const data = await reponse.json();
+        useStat(data);
+      }
+    };
+
+    if (user) fetchStat();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-muted-foreground">Carregando...</div>
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -14,7 +51,7 @@ export default function Dashboard() {
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-2">
             Dashboard
           </h1>
-          <p className="ext-lg text-muted-foreground">, !</p>
+          <p className="ext-lg text-muted-foreground">, {user.name}!</p>
         </div>
 
         <div className="grid md:grid-cols-2 ld:grid-cols-4 gap-6 mb-12">
@@ -26,7 +63,9 @@ export default function Dashboard() {
               <TrendingUp className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-foreground"></div>
+              <div className="text-3xl font-bold text-foreground">
+                {stats.total}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
                 Em sua coleção
               </p>
@@ -42,7 +81,9 @@ export default function Dashboard() {
                 <Book className="w-4 h-4 text-blue-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-foreground"></div>
+                <div className="text-3xl font-bold text-foreground">
+                  {stats.books}
+                </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Livros registrados
                 </p>
@@ -59,7 +100,9 @@ export default function Dashboard() {
                 <Film className="w-4 h-4 text-purple-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-foreground"></div>
+                <div className="text-3xl font-bold text-foreground">
+                  {stats.movies}
+                </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Filmes registrados
                 </p>
@@ -76,7 +119,9 @@ export default function Dashboard() {
                 <Tv className="w-4 h-4 text-orange-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-boal text-foreground"></div>
+                <div className="text-3xl font-boal text-foreground">
+                  {stats.animes}
+                </div>
                 <p className="text-xl text-muted-foreground mt-1">
                   Animes acompanhados
                 </p>
