@@ -1,21 +1,62 @@
 "use client";
+
 import type React from "react";
-import { Header } from "../_components/header";
-import { Lock, LogIn, Mail } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { LogIn, Mail, Lock } from "lucide-react";
+import { useAuth } from "@/contexts/auth-client";
+import { Header } from "../_components/header";
 
-export default function Login() {
+export default function LoginPage() {
+  const { user, login } = useAuth();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      await login(formData.email, formData.password);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(
+        err.message || "Erro ao fazer login. Verifique suas credenciais."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -32,6 +73,7 @@ export default function Login() {
               Entre para acessar sua coleção
             </p>
           </div>
+
           <Card>
             <CardHeader>
               <CardTitle>Login</CardTitle>
@@ -40,7 +82,7 @@ export default function Login() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
@@ -48,6 +90,10 @@ export default function Login() {
                     <Input
                       id="email"
                       type="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       placeholder="seu@email.com"
                       className="pl-10"
                       required
@@ -62,20 +108,33 @@ export default function Login() {
                     <Input
                       id="password"
                       type="password"
-                      placeholder="********"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      placeholder="••••••••"
                       className="pl-10"
                       required
                     />
                   </div>
                 </div>
 
-                {/* error */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
 
-                <Button type="submit" size="lg" className="w-full">
-                  Entrar
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full"
+                  disabled={loading}
+                >
+                  {loading ? "Entrando..." : "Entrar"}
                 </Button>
 
-                <div>
+                <div className="text-center text-sm text-muted-foreground">
                   Não tem uma conta?{" "}
                   <Link
                     href="/register"
@@ -88,15 +147,13 @@ export default function Login() {
                 <div className="pt-4 border-t border-border">
                   <p className="text-xs text-muted-foreground text-center">
                     Credenciais de teste: <br />
-                    Email:
-                    <span className="text-xs text-foreground font-mono">
+                    Email:{" "}
+                    <span className="text-foreground font-mono">
                       demo@example.com
-                    </span>
+                    </span>{" "}
                     <br />
-                    Senha:
-                    <span className="text-xs text-foreground font-mono">
-                      demo123
-                    </span>
+                    Senha:{" "}
+                    <span className="text-foreground font-mono">demo123</span>
                   </p>
                 </div>
               </form>

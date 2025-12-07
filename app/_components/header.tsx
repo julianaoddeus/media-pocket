@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Book,
@@ -11,7 +12,11 @@ import {
 import logo from "../../public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-client";
+
 export function Header() {
+  const { user, logout } = useAuth();
+
   return (
     <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -19,7 +24,13 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-linear-to-br from-primary to-secondary flex items-center justify-center">
               <span className="text-2xl">
-                <Image src={logo} alt="Logo do site" width={200} height={200} className="rounded-full"/>
+                <Image
+                  src={logo}
+                  alt="Logo do site"
+                  width={200}
+                  height={200}
+                  className="rounded-full"
+                />
               </span>
             </div>
             <span className="text-2xl font-serif font-bold text-foreground">
@@ -49,19 +60,52 @@ export function Header() {
               <span>Animes</span>
             </Link>
           </nav>
-
-          <div className="flex items-center gap-4">
+          {user ? (
             <>
-              <Link href="/login">
-                <Button variant="ghost" size="sm">
-                  Login
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span className="hidden sm:inline">Dashboard</span>
                 </Button>
               </Link>
-              <Link href="/register">
-                <Button size="sm">Cadastrar</Button>
+              <Link href="/add">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 bg-transparent"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Adicionar</span>
+                </Button>
               </Link>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">{user.name}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={logout}
+                className="gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Sair</span>
+              </Button>
             </>
-          </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm">Cadastrar</Button>
+                </Link>
+              </>
+            </div>
+          )}
         </div>
       </div>
     </header>

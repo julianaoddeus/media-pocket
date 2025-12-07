@@ -1,7 +1,11 @@
-import { Book, Film, Heart, Tv } from "lucide-react";
+
+import { Book, Film, Tv, Heart } from "lucide-react";
 import { Header } from "../_components/header";
 
-export default function About() {
+// Página estática sobre o projeto
+export const dynamic = "force-static";
+
+export default function AboutPage() {
   return (
     <div className="min-h-screen">
       <Header />
@@ -19,7 +23,7 @@ export default function About() {
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 my-12">
-              <div className="bg0card p-6 rounded-xl border border-border">
+              <div className="bg-card p-6 rounded-xl border border-border">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
                   <Book className="w-6 h-6 text-blue-500" />
                 </div>
@@ -32,7 +36,7 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="bg-card p-6 roudend-xl border border-border">
+              <div className="bg-card p-6 rounded-xl border border-border">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
                   <Film className="w-6 h-6 text-purple-500" />
                 </div>
@@ -45,7 +49,7 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="bg-card p-6 roundend-xl border border-border">
+              <div className="bg-card p-6 rounded-xl border border-border">
                 <div className="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-4">
                   <Tv className="w-6 h-6 text-orange-500" />
                 </div>
@@ -57,66 +61,67 @@ export default function About() {
                   onde parou
                 </p>
               </div>
-
-             <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-8 rounded-xl border border-primary/20 my-12">
-                <div className="flex items-center gap-3 mb-4">
-                  <Heart className="w-6 h-6 text-accent" />
-                  <h2 className="text-2xl font-semibold text-foreground">
-                    Nossa Missão
-                  </h2>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  Criamos o Media Pocket com o objetivo de oferecer uma
-                  experiência simples e intuitiva para quem ama consumir
-                  diferentes tipos de mídia. Acreditamos que organizar seus
-                  favoritos deve ser tão prazeroso quanto descobri-los.
-                </p>
-              </div>
-              <h2 className="text-3xl font-serif font-bold text-foreground mb-4">
-                Tecnologias
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Este projeto foi desenvolvido com as melhores tecnologias
-                modernas:
-              </p>
-              <ul className="space-y-2 text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <span>
-                    <strong className="text-foreground">Next.js 16</strong> -
-                    Framework React com SSG e SSR
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <span>
-                    <strong className="text-foreground">Apollo GraphQL</strong>{" "}
-                    - Client para consultas eficientes SSR
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <span>
-                    <strong className="text-foreground">Strapi CMS</strong> -
-                    Gerenciamento de conteúdo headless
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <span>
-                    <strong className="text-foreground">Tailwind CSS</strong> -
-                    Estilização moderna e responsiva
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">•</span>
-                  <span>
-                    <strong className="text-foreground">TypeScript</strong> -
-                    Type-safety e melhor DX
-                  </span>
-                </li>
-              </ul>
             </div>
+
+            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-8 rounded-xl border border-primary/20 my-12">
+              <div className="flex items-center gap-3 mb-4">
+                <Heart className="w-6 h-6 text-accent" />
+                <h2 className="text-2xl font-semibold text-foreground">
+                  Nossa Missão
+                </h2>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Criamos o Media Pocket com o objetivo de oferecer uma
+                experiência simples e intuitiva para quem ama consumir
+                diferentes tipos de mídia. Acreditamos que organizar seus
+                favoritos deve ser tão prazeroso quanto descobri-los.
+              </p>
+            </div>
+
+            <h2 className="text-3xl font-serif font-bold text-foreground mb-4">
+              Tecnologias
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Este projeto foi desenvolvido com as melhores tecnologias
+              modernas:
+            </p>
+            <ul className="space-y-2 text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                <span>
+                  <strong className="text-foreground">Next.js 16</strong> -
+                  Framework React com SSG e SSR
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                <span>
+                  <strong className="text-foreground">Apollo GraphQL</strong> -
+                  Client para consultas eficientes
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                <span>
+                  <strong className="text-foreground">Strapi CMS</strong> -
+                  Gerenciamento de conteúdo headless
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                <span>
+                  <strong className="text-foreground">Tailwind CSS</strong> -
+                  Estilização moderna e responsiva
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                <span>
+                  <strong className="text-foreground">TypeScript</strong> -
+                  Type-safety e melhor DX
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </main>
