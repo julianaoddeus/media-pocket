@@ -1,3 +1,22 @@
-export async function POST(req: Request) {
-    
+import { getBooks } from "@/app/services/books-services";
+import { createClient } from "@/lib/supabase/server";
+
+export async function GET() {
+  try {
+    const supabase = createClient();
+    const books = getBooks(await supabase);
+    return new Response(JSON.stringify(books), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(
+      JSON.stringify({ message: "Erro interno do servidor" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }

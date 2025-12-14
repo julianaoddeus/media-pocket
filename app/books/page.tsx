@@ -1,24 +1,20 @@
-import { db } from "@/lib/interface";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getBooks } from "../services/books-services";
 
 export const dynimic = "force-dynamic";
 export const revalidate = 3600;
 
-async function getBooks() {
-  return db.books;
-}
-
 export default async function Book() {
   const supabase = await createClient();
-  const books = await getBooks();
+  const books = await getBooks(supabase);
 
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  console.log("book", session);
+
   if (!session) {
     redirect("/login");
   }
@@ -36,7 +32,7 @@ export default async function Book() {
           </p>
         </div>
 
-        {books.length === 0 ? (
+        {books?.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg">
               Nenhum livro encontrado. Adicione seu primeiro livro!
@@ -44,7 +40,7 @@ export default async function Book() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {books.map((book) => (
+            {books?.map((book) => (
               <MediaCard
                 key={book.id}
                 id={book.id}
@@ -52,7 +48,7 @@ export default async function Book() {
                 image={book.cover}
                 rating={book.rating}
                 subtitle={book.author}
-                href={`/movies/${book.id}`}
+                href={`/books/${book.id}`}
               />
             ))}
           </div>
