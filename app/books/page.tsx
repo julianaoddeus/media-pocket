@@ -18,7 +18,7 @@ export default async function Book() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
+  console.log("book", session);
   if (!session) {
     redirect("/login");
   }

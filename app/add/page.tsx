@@ -1,25 +1,33 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Book, Film, Tv } from "lucide-react";
 import { Header } from "../_components/header";
 import { BookForm } from "../_components/forms/book-form";
 import { MovieForm } from "../_components/forms/movie.form";
 import { AnimeForm } from "../_components/forms/anime-form";
-import { createClient } from "@/lib/supabase/server";
+
 import { redirect } from "next/navigation";
+import { useAuth } from "@/contexts/auth-client";
+import { useEffect } from "react";
+import { FullscreenLoadingSpinner } from "../_components/spinner";
 
-export const dynamic = "force-static";
+export default function Add() {
+  const { user, isLoading } = useAuth();
 
-export default async function Add() {
-  const supabase = await createClient();
+  useEffect(() => {
+    if (!isLoading && !user) {
+      redirect("/login");
+    }
+  }, [user, isLoading]);
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect("/login");
+  if (isLoading) {
+     return <FullscreenLoadingSpinner />;
   }
 
+  if (!user) {
+    return null;
+  }
   return (
     <div className="min-h-screen">
       <Header />

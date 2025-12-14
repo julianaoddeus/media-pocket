@@ -54,7 +54,7 @@ export default function Dashboard() {
             Dashboard
           </h1>
           <p className="text-lg text-muted-foreground">
-            Seja bem vindo, {user?.user_metadata?.name}!
+            Seja em vindo, {user?.user_metadata?.name}!
           </p>
         </div>
 

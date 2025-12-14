@@ -19,7 +19,6 @@ export default async function Animes() {
     data: { session },
   } = await supabase.auth.getSession();
 
-  
   if (!session) {
     redirect("/login");
   }

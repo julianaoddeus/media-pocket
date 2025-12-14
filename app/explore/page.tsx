@@ -8,11 +8,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Book, Film, Tv } from "lucide-react";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
+import { useAuth } from "@/contexts/auth-client";
+import { redirect } from "next/navigation";
+import { FullscreenLoadingSpinner } from "../_components/spinner";
 
 export default function Explore() {
   const { books, loading: booksLoading } = useBooks();
   const { movies, loading: moviesLoading } = useMovies();
   const { animes, loading: animesLoading } = useAnimes();
+
+  const { user, isLoading } = useAuth();
+
+  if (!isLoading) {
+    return <FullscreenLoadingSpinner />;
+  }
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <div className="min-h-screen">
