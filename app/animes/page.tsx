@@ -1,20 +1,16 @@
-import { db } from "@/lib/interface";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getAnimes } from "../services/animes-services";
 
 export const dynimic = "force-dynamic";
 export const revalidate = 3600;
 
-async function getAnimes() {
-  return db.animes;
-}
-
 export default async function Animes() {
   const supabase = await createClient();
-  const animes = await getAnimes();
-
+  const animes = await getAnimes(supabase);
+  console.log(animes);
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -35,7 +31,7 @@ export default async function Animes() {
             Uma coleção dos melhores animes que já li
           </p>
         </div>
-        {animes.length === 0 ? (
+        {animes?.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg">
               Nenhum anime encontrado. Adicione seu primeiro anime!
@@ -43,7 +39,7 @@ export default async function Animes() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {animes.map((anime) => (
+            {animes?.map((anime) => (
               <MediaCard
                 key={anime.id}
                 id={anime.id}

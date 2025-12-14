@@ -3,17 +3,14 @@ import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getMovies } from "../services/movies-services";
 
 export const dynimic = "force-dynamic";
 export const revalidate = 3600;
 
-async function getMovies() {
-  return db.movies;
-}
-
 export default async function Movies() {
   const supabase = await createClient();
-  const movies = await getMovies();
+  const movies = await getMovies(supabase);
 
   const {
     data: { session },
@@ -36,7 +33,7 @@ export default async function Movies() {
           </p>
         </div>
 
-        {movies.length === 0 ? (
+        {movies?.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg">
               Nenhum filme encontrado. Adicione seu primeiro filme!
@@ -44,7 +41,7 @@ export default async function Movies() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {movies.map((movie) => (
+            {movies?.map((movie) => (
               <MediaCard
                 key={movie.id}
                 id={movie.id}
