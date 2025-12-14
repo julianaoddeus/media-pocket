@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { Movie } from "@/lib/db"
-import { graphqlFetch } from "@/lib/graphql-client"
+import { useState, useEffect } from "react";
+import type { Movie } from "@/lib/interface";
+import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_MOVIES_QUERY = `
   query GetMovies {
@@ -17,7 +17,7 @@ const GET_MOVIES_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const GET_MOVIE_QUERY = `
   query GetMovie($id: ID!) {
@@ -32,7 +32,7 @@ const GET_MOVIE_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const CREATE_MOVIE_MUTATION = `
   mutation CreateMovie($title: String!, $director: String!, $description: String!, $poster: String!, $rating: Int!) {
@@ -47,83 +47,83 @@ const CREATE_MOVIE_MUTATION = `
       createdAt
     }
   }
-`
+`;
 
 export function useMovies() {
-  const [movies, setMovies] = useState<Movie[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   const refetch = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(GET_MOVIES_QUERY)
-      setMovies(data.movies || [])
+      const data = await graphqlFetch(GET_MOVIES_QUERY);
+      setMovies(data.movies || []);
     } catch (err) {
-      setError(err as Error)
+      setError(err as Error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    refetch()
-  }, [])
+    refetch();
+  }, []);
 
-  return { movies, loading, error, refetch }
+  return { movies, loading, error, refetch };
 }
 
 export function useMovie(id: string) {
-  const [movie, setMovie] = useState<Movie | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
 
     const fetchMovie = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       try {
-        const data = await graphqlFetch(GET_MOVIE_QUERY, { id })
-        setMovie(data.movie)
+        const data = await graphqlFetch(GET_MOVIE_QUERY, { id });
+        setMovie(data.movie);
       } catch (err) {
-        setError(err as Error)
+        setError(err as Error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchMovie()
-  }, [id])
+    fetchMovie();
+  }, [id]);
 
-  return { movie, loading, error }
+  return { movie, loading, error };
 }
 
 export function useCreateMovie() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const createMovie = async (input: {
-    title: string
-    director: string
-    description: string
-    poster: string
-    rating: number
+    title: string;
+    director: string;
+    description: string;
+    poster: string;
+    rating: number;
   }) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(CREATE_MOVIE_MUTATION, input)
-      return data.createMovie
+      const data = await graphqlFetch(CREATE_MOVIE_MUTATION, input);
+      return data.createMovie;
     } catch (err) {
-      setError(err as Error)
-      throw err
+      setError(err as Error);
+      throw err;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  return { createMovie, loading, error }
+  return { createMovie, loading, error };
 }

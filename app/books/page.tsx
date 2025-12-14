@@ -1,16 +1,27 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/interface";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-static";
+export const dynimic = "force-dynamic";
 export const revalidate = 3600;
 
 async function getBooks() {
   return db.books;
 }
 
-export default async function Books() {
+export default async function Book() {
+  const supabase = await createClient();
   const books = await getBooks();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <div>

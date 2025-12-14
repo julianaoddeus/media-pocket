@@ -1,11 +1,21 @@
-
 import { Book, Film, Tv, Heart } from "lucide-react";
 import { Header } from "../_components/header";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-// Página estática sobre o projeto
 export const dynamic = "force-static";
 
-export default function AboutPage() {
+export default async function About() {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div className="min-h-screen">
       <Header />

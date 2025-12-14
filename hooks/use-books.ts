@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { Book } from "@/lib/db"
-import { graphqlFetch } from "@/lib/graphql-client"
+import { useState, useEffect } from "react";
+import type { Book } from "@/lib/interface";
+import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_BOOKS_QUERY = `
   query GetBooks {
@@ -17,7 +17,7 @@ const GET_BOOKS_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const GET_BOOK_QUERY = `
   query GetBook($id: ID!) {
@@ -32,7 +32,7 @@ const GET_BOOK_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const CREATE_BOOK_MUTATION = `
   mutation CreateBook($title: String!, $author: String!, $description: String!, $cover: String!, $rating: Int!) {
@@ -47,83 +47,83 @@ const CREATE_BOOK_MUTATION = `
       createdAt
     }
   }
-`
+`;
 
 export function useBooks() {
-  const [books, setBooks] = useState<Book[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   const refetch = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(GET_BOOKS_QUERY)
-      setBooks(data.books || [])
+      const data = await graphqlFetch(GET_BOOKS_QUERY);
+      setBooks(data.books || []);
     } catch (err) {
-      setError(err as Error)
+      setError(err as Error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    refetch()
-  }, [])
+    refetch();
+  }, []);
 
-  return { books, loading, error, refetch }
+  return { books, loading, error, refetch };
 }
 
 export function useBook(id: string) {
-  const [book, setBook] = useState<Book | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [book, setBook] = useState<Book | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
 
     const fetchBook = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       try {
-        const data = await graphqlFetch(GET_BOOK_QUERY, { id })
-        setBook(data.book)
+        const data = await graphqlFetch(GET_BOOK_QUERY, { id });
+        setBook(data.book);
       } catch (err) {
-        setError(err as Error)
+        setError(err as Error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchBook()
-  }, [id])
+    fetchBook();
+  }, [id]);
 
-  return { book, loading, error }
+  return { book, loading, error };
 }
 
 export function useCreateBook() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const createBook = async (input: {
-    title: string
-    author: string
-    description: string
-    cover: string
-    rating: number
+    title: string;
+    author: string;
+    description: string;
+    cover: string;
+    rating: number;
   }) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(CREATE_BOOK_MUTATION, input)
-      return data.createBook
+      const data = await graphqlFetch(CREATE_BOOK_MUTATION, input);
+      return data.createBook;
     } catch (err) {
-      setError(err as Error)
-      throw err
+      setError(err as Error);
+      throw err;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  return { createBook, loading, error }
+  return { createBook, loading, error };
 }

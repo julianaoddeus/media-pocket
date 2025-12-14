@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { Anime } from "@/lib/db"
-import { graphqlFetch } from "@/lib/graphql-client"
+import { useState, useEffect } from "react";
+import type { Anime } from "@/lib/interface";
+import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_ANIMES_QUERY = `
   query GetAnimes {
@@ -18,7 +18,7 @@ const GET_ANIMES_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const GET_ANIME_QUERY = `
   query GetAnime($id: ID!) {
@@ -34,7 +34,7 @@ const GET_ANIME_QUERY = `
       createdAt
     }
   }
-`
+`;
 
 const CREATE_ANIME_MUTATION = `
   mutation CreateAnime($title: String!, $studio: String!, $description: String!, $poster: String!, $rating: Int!, $episodes: Int!) {
@@ -50,84 +50,84 @@ const CREATE_ANIME_MUTATION = `
       createdAt
     }
   }
-`
+`;
 
 export function useAnimes() {
-  const [animes, setAnimes] = useState<Anime[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [animes, setAnimes] = useState<Anime[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   const refetch = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(GET_ANIMES_QUERY)
-      setAnimes(data.animes || [])
+      const data = await graphqlFetch(GET_ANIMES_QUERY);
+      setAnimes(data.animes || []);
     } catch (err) {
-      setError(err as Error)
+      setError(err as Error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    refetch()
-  }, [])
+    refetch();
+  }, []);
 
-  return { animes, loading, error, refetch }
+  return { animes, loading, error, refetch };
 }
 
 export function useAnime(id: string) {
-  const [anime, setAnime] = useState<Anime | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [anime, setAnime] = useState<Anime | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
 
     const fetchAnime = async () => {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
       try {
-        const data = await graphqlFetch(GET_ANIME_QUERY, { id })
-        setAnime(data.anime)
+        const data = await graphqlFetch(GET_ANIME_QUERY, { id });
+        setAnime(data.anime);
       } catch (err) {
-        setError(err as Error)
+        setError(err as Error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchAnime()
-  }, [id])
+    fetchAnime();
+  }, [id]);
 
-  return { anime, loading, error }
+  return { anime, loading, error };
 }
 
 export function useCreateAnime() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const createAnime = async (input: {
-    title: string
-    studio: string
-    description: string
-    poster: string
-    rating: number
-    episodes: number
+    title: string;
+    studio: string;
+    description: string;
+    poster: string;
+    rating: number;
+    episodes: number;
   }) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const data = await graphqlFetch(CREATE_ANIME_MUTATION, input)
-      return data.createAnime
+      const data = await graphqlFetch(CREATE_ANIME_MUTATION, input);
+      return data.createAnime;
     } catch (err) {
-      setError(err as Error)
-      throw err
+      setError(err as Error);
+      throw err;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  return { createAnime, loading, error }
+  return { createAnime, loading, error };
 }

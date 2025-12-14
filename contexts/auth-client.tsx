@@ -7,76 +7,130 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import type { AuthUser } from "@/lib/auth";
+
+import { createClient } from "@/lib/supabase/client";
+import { IUser } from "@/lib/interface";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
-  user: AuthUser | null;
+  user: IUser | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
+  getSignedUrl: (filePath: string) => Promise<string>;
+  uploadPicture: (file: File, userId: string) => Promise<string>;
   logout: () => void;
   isLoading: boolean;
 }
 
+const EXPIRATION_TIME_SECONDS = 2592000;
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const supabase = createClient();
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const router = useRouter();
+  const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    const userData = localStorage.getItem("user_data");
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+        setIsLoading(false);
+      }
+    );
 
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
-    setIsLoading(false);
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+    console.log("login called", email, password);
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Login failed");
+    setIsLoading(false);
+    if (error) {
+      throw new Error(error.message);
     }
-
-    const { user, token } = await response.json();
-    localStorage.setItem("auth_token", token);
-    localStorage.setItem("user_data", JSON.stringify(user));
-    setUser(user);
   };
 
   const register = async (email: string, password: string, name: string) => {
-    const response = await fetch("/api/auth/register", {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erro desconhecido ao registrar.");
+      }
+      await login(email, password);
+    } catch (error: any) {
+      throw new Error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, name }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Registration failed");
+    setUser(null);
+
+    router.refresh();
+  };
+
+  const uploadPicture = async (file: File, userId: string) => {
+    const filePath = `${userId}/${file.name}`;
+
+    const { data, error } = await supabase.storage
+      .from("media_poket_Storage")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (error) {
+      throw new Error("Erro ao fazer upload: " + error.message);
     }
 
-    const { user, token } = await response.json();
-    localStorage.setItem("auth_token", token);
-    localStorage.setItem("user_data", JSON.stringify(user));
-    setUser(user);
+    return data.path;
   };
 
-  const logout = () => {
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("user_data");
-    setUser(null);
-  };
+  async function getSignedUrl(filePath: string) {
+    const { data, error } = await supabase.storage
+      .from("media_poket_Storage")
+      .createSignedUrl(filePath, EXPIRATION_TIME_SECONDS);
+
+    if (error) {
+      throw new Error("Erro ao obter URL: " + error.message);
+    }
+
+    return data.signedUrl;
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        getSignedUrl,
+        uploadPicture,
+        isLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

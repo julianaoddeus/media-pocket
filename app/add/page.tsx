@@ -4,9 +4,22 @@ import { Header } from "../_components/header";
 import { BookForm } from "../_components/forms/book-form";
 import { MovieForm } from "../_components/forms/movie.form";
 import { AnimeForm } from "../_components/forms/anime-form";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
+export const dynamic = "force-static";
 
-export default function Add() {
+export default async function Add() {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div className="min-h-screen">
       <Header />

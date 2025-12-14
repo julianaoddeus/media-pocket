@@ -18,7 +18,9 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (!isLoading && !user) redirect("/login");
+    if (!user) {
+      redirect("/login");
+    }
   }, [user, isLoading]);
 
   useEffect(() => {
@@ -51,7 +53,9 @@ export default function Dashboard() {
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-2">
             Dashboard
           </h1>
-          <p className="ext-lg text-muted-foreground">, {user.name}!</p>
+          <p className="text-lg text-muted-foreground">
+            Seja bem vindo, {user?.user_metadata?.name}!
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 ld:grid-cols-4 gap-6 mb-12">

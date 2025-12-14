@@ -1,13 +1,15 @@
 // Mock database para simular Strapi CMS
-export interface User {
+export interface IUser {
   id: string;
   email: string;
   password: string;
-  name: string;
   createdAt: string;
+  user_metadata: {
+    name: string;
+  };
 }
 
-export interface Book {
+export interface IBook {
   id: string;
   title: string;
   author: string;
@@ -18,7 +20,7 @@ export interface Book {
   createdAt: string;
 }
 
-export interface Movie {
+export interface IMovie {
   id: string;
   title: string;
   director: string;
@@ -29,7 +31,7 @@ export interface Movie {
   createdAt: string;
 }
 
-export interface Anime {
+export interface IAnime {
   id: string;
   title: string;
   studio: string;
@@ -48,10 +50,10 @@ export const db = {
       id: "1",
       email: "demo@example.com",
       password: "demo123",
-      name: "Demo User",
+
       createdAt: new Date().toISOString(),
     },
-  ] as User[],
+  ] as IUser[],
   books: [
     {
       id: "1",
@@ -60,8 +62,8 @@ export const db = {
       description: "Uma épica jornada pela Terra Média",
       cover: "/lord-of-the-rings-cover.png",
       rating: 5,
-      userId: "1",
-      createdAt: new Date().toISOString(),
+      user_id: "1",
+      created_at: new Date().toISOString(),
     },
     {
       id: "2",
@@ -73,7 +75,7 @@ export const db = {
       userId: "1",
       createdAt: new Date().toISOString(),
     },
-  ] as Book[],
+  ] as IBook[],
   movies: [
     {
       id: "1",
@@ -95,7 +97,7 @@ export const db = {
       userId: "1",
       createdAt: new Date().toISOString(),
     },
-  ] as Movie[],
+  ] as IMovie[],
   animes: [
     {
       id: "1",
@@ -120,5 +122,5 @@ export const db = {
       userId: "1",
       createdAt: new Date().toISOString(),
     },
-  ] as Anime[],
+  ] as IAnime[],
 };

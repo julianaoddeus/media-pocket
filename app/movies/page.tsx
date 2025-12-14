@@ -1,6 +1,8 @@
-import { db } from "@/lib/db";
+import { db } from "@/lib/interface";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export const dynimic = "force-dynamic";
 export const revalidate = 3600;
@@ -10,7 +12,16 @@ async function getMovies() {
 }
 
 export default async function Movies() {
+  const supabase = await createClient();
   const movies = await getMovies();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <div>

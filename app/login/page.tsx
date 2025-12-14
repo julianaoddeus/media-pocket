@@ -149,7 +149,7 @@ export default function LoginPage() {
                     Credenciais de teste: <br />
                     Email:{" "}
                     <span className="text-foreground font-mono">
-                      demo@example.com
+                      demo@exemplo.com
                     </span>{" "}
                     <br />
                     Senha:{" "}

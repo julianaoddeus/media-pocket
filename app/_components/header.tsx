@@ -80,7 +80,9 @@ export function Header() {
               </Link>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <User className="w-4 h-4" />
-                <span className="hidden sm:inline">{user.name}</span>
+                <span className="hidden sm:inline">
+                  {user?.user_metadata?.name}
+                </span>
               </div>
               <Button
                 variant="ghost"
