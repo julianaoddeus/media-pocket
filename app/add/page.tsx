@@ -22,12 +22,13 @@ export default function Add() {
   }, [user, isLoading]);
 
   if (isLoading) {
-     return <FullscreenLoadingSpinner />;
+    return <FullscreenLoadingSpinner />;
   }
 
   if (!user) {
     return null;
   }
+
   return (
     <div className="min-h-screen">
       <Header />

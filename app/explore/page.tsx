@@ -11,6 +11,7 @@ import { MediaCard } from "../_components/meadia-card";
 import { useAuth } from "@/contexts/auth-client";
 import { redirect } from "next/navigation";
 import { FullscreenLoadingSpinner } from "../_components/spinner";
+import { useEffect } from "react";
 
 export default function Explore() {
   const { books, loading: booksLoading } = useBooks();
@@ -19,11 +20,18 @@ export default function Explore() {
 
   const { user, isLoading } = useAuth();
 
-  if (!isLoading) {
+  useEffect(() => {
+    if (!isLoading && !user) {
+      redirect("/login");
+    }
+  }, [user, isLoading]);
+
+  if (isLoading) {
     return <FullscreenLoadingSpinner />;
   }
+
   if (!user) {
-    redirect("/login");
+    return null;
   }
 
   return (
