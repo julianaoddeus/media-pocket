@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Anime } from "@/lib/interface";
+import type { IAnime } from "@/lib/interface";
 import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_ANIMES_QUERY = `
@@ -53,7 +53,7 @@ const CREATE_ANIME_MUTATION = `
 `;
 
 export function useAnimes() {
-  const [animes, setAnimes] = useState<Anime[]>([]);
+  const [animes, setAnimes] = useState<IAnime[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -78,7 +78,7 @@ export function useAnimes() {
 }
 
 export function useAnime(id: string) {
-  const [anime, setAnime] = useState<Anime | null>(null);
+  const [anime, setAnime] = useState<IAnime | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

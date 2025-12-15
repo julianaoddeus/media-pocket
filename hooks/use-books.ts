@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Book } from "@/lib/interface";
+import type { IBook } from "@/lib/interface";
 import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_BOOKS_QUERY = `
@@ -50,7 +50,7 @@ const CREATE_BOOK_MUTATION = `
 `;
 
 export function useBooks() {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [books, setBooks] = useState<IBook[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -75,7 +75,7 @@ export function useBooks() {
 }
 
 export function useBook(id: string) {
-  const [book, setBook] = useState<Book | null>(null);
+  const [book, setBook] = useState<IBook | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

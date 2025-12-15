@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Movie } from "@/lib/interface";
+import type { IMovie } from "@/lib/interface";
 import { graphqlFetch } from "@/lib/graphql-client";
 
 const GET_MOVIES_QUERY = `
@@ -50,7 +50,7 @@ const CREATE_MOVIE_MUTATION = `
 `;
 
 export function useMovies() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<IMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -75,7 +75,7 @@ export function useMovies() {
 }
 
 export function useMovie(id: string) {
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [movie, setMovie] = useState<IMovie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
