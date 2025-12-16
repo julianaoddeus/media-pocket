@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import { createClient } from "@/lib/supabase/client";
-import { IUser } from "@/lib/interface";
+import { IUser } from "@/lib/interface/user";
 import { useRouter } from "next/navigation";
 
 interface AuthContextType {

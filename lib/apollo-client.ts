@@ -1,34 +1,31 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { SetContextLink } from "@apollo/client/link/context";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "./supabase/client";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-);
 
-// Link de contexto (auth)
-const authLink = new SetContextLink(async (prevContext, operation) => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+const supabase = createClient()
 
-  return {
-    headers: {
-      ...prevContext.headers,
-      Authorization: session?.access_token
-        ? `Bearer ${session.access_token}`
-        : "",
-    },
-  };
-});
-
-// Link HTTP (GraphQL do Supabase)
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_SUPABASE_GRAPHQL_URL!,
+  uri: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/graphql/v1`,
+  fetch: async (uri, options) => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const headers = new Headers(options?.headers);
+    headers.set("apikey", process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!);
+
+    if (session?.access_token) {
+      headers.set("Authorization", `Bearer ${session.access_token}`);
+    }
+
+    return fetch(uri, {
+      ...options,
+      headers,
+    });
+  },
 });
 
-export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+export const apolloClient = new ApolloClient({
+  link: httpLink,
   cache: new InMemoryCache(),
 });

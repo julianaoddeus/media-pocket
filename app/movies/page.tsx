@@ -1,4 +1,4 @@
-import { db } from "@/lib/interface";
+import { db } from "@/lib/interface/user";
 import { Header } from "../_components/header";
 import { MediaCard } from "../_components/meadia-card";
 import { createClient } from "@/lib/supabase/server";

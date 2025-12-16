@@ -1,133 +1,15 @@
+// hooks/use-books-graphql.ts
 "use client";
 
-import { useState, useEffect } from "react";
-import type { IAnime } from "@/lib/interface";
-import { graphqlFetch } from "@/lib/graphql-client";
-
-const GET_ANIMES_QUERY = `
-  query GetAnimes {
-    animes {
-      id
-      title
-      studio
-      description
-      poster
-      rating
-      episodes
-      userId
-      createdAt
-    }
-  }
-`;
-
-const GET_ANIME_QUERY = `
-  query GetAnime($id: ID!) {
-    anime(id: $id) {
-      id
-      title
-      studio
-      description
-      poster
-      rating
-      episodes
-      userId
-      createdAt
-    }
-  }
-`;
-
-const CREATE_ANIME_MUTATION = `
-  mutation CreateAnime($title: String!, $studio: String!, $description: String!, $poster: String!, $rating: Int!, $episodes: Int!) {
-    createAnime(title: $title, studio: $studio, description: $description, poster: $poster, rating: $rating, episodes: $episodes) {
-      id
-      title
-      studio
-      description
-      poster
-      rating
-      episodes
-      userId
-      createdAt
-    }
-  }
-`;
+import { useQuery } from "@apollo/client/react";
+import { GET_ANIMES_QUERY } from "@/graphql/queries/animes";
+import { GetAnimesResponse } from "@/graphql/types/anime";
 
 export function useAnimes() {
-  const [animes, setAnimes] = useState<IAnime[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const { data, loading, error } =
+    useQuery<GetAnimesResponse>(GET_ANIMES_QUERY);
 
-  const refetch = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await graphqlFetch(GET_ANIMES_QUERY);
-      setAnimes(data.animes || []);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const animes = data?.animesCollection?.edges.map((e: any) => e.node) ?? [];
 
-  useEffect(() => {
-    refetch();
-  }, []);
-
-  return { animes, loading, error, refetch };
-}
-
-export function useAnime(id: string) {
-  const [anime, setAnime] = useState<IAnime | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchAnime = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await graphqlFetch(GET_ANIME_QUERY, { id });
-        setAnime(data.anime);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnime();
-  }, [id]);
-
-  return { anime, loading, error };
-}
-
-export function useCreateAnime() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-
-  const createAnime = async (input: {
-    title: string;
-    studio: string;
-    description: string;
-    poster: string;
-    rating: number;
-    episodes: number;
-  }) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await graphqlFetch(CREATE_ANIME_MUTATION, input);
-      return data.createAnime;
-    } catch (err) {
-      setError(err as Error);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { createAnime, loading, error };
+  return { animes, loading, error };
 }
