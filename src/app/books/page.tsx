@@ -9,7 +9,7 @@ export const revalidate = 3600;
 
 export default async function Book() {
   const supabase = await createClient();
-  const books = await getBooks(supabase);
+  const books = await getBooks();
 
   const {
     data: { session },

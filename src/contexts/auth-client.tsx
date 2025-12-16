@@ -8,9 +8,10 @@ import {
   type ReactNode,
 } from "react";
 
-import { createClient } from "@/lib/supabase/client";
+
 import { IUser } from "@/lib/interface/user";
 import { useRouter } from "next/navigation";
+import { createClient } from '@/lib/supabase/client';
 
 interface AuthContextType {
   user: IUser | null;
@@ -44,8 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const login = async (email: string, password: string) => {
-    console.log("login called", email, password);
+  const login = async (email: string, password: string) => {   
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,

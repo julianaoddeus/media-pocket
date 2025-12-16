@@ -20,7 +20,7 @@ export default function Explore() {
   const { animes, loading: animesLoading } = useAnimes();
 
   const { user, isLoading } = useAuth();
-  console.log(books, movies, animes);
+
   useEffect(() => {
     if (!isLoading && !user) {
       redirect("/login");
