@@ -9,8 +9,8 @@ export const revalidate = 3600;
 
 export default async function Animes() {
   const supabase = await createClient();
-  const animes = await getAnimes(supabase);
-  console.log(animes);
+  const animes = await getAnimes();
+
   const {
     data: { session },
   } = await supabase.auth.getSession();

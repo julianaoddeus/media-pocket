@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuth();
-  const [stats, useStat] = useState({
+  const [stats, setStats] = useState({
     books: 0,
     movies: 0,
     animes: 0,
@@ -22,17 +22,21 @@ export default function Dashboard() {
       redirect("/login");
     }
   }, [user, isLoading]);
+ 
 
-  useEffect(() => {
-    const fetchStat = async () => {
-      const reponse = await fetch("/api/stats");
-      if (reponse.ok) {
-        const data = await reponse.json();
-        useStat(data);
+
+   useEffect(() => {    
+    const fetchStats = async () => {      
+      const response = await fetch("/api/stats");
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data);
       }
     };
 
-    if (user) fetchStat();
+    if (user) {
+      fetchStats();
+    }
   }, [user]);
 
   if (isLoading) {

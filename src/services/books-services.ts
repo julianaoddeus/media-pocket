@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { SupabaseClient } from "@supabase/supabase-js";
 
 export async function getBooks() {
   // Use o cliente Admin, seguro no build/servidor

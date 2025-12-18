@@ -9,7 +9,7 @@ export const revalidate = 3600;
 
 export default async function Movies() {
   const supabase = await createClient();
-  const movies = await getMovies(supabase);
+  const movies = await getMovies();
 
   const {
     data: { session },

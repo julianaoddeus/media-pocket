@@ -1,11 +1,9 @@
 
-import { createClient } from "@/lib/supabase/server";
 import { getBooks } from "@/services/books-services";
 
 export async function GET() {
-  try {
-    const supabase = createClient();
-    const books = getBooks(await supabase);
+  try {    
+    const books = getBooks();
     return new Response(JSON.stringify(books), {
       status: 200,
       headers: { "Content-Type": "application/json" },

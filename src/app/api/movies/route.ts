@@ -1,10 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { getMovies } from "@/services/movies-services";
 
 export async function GET() {
-  try {
-    const supabase = createClient();
-    const animes = getBooks(await supabase);
+  try {   
+    const animes = getMovies();
     return new Response(JSON.stringify(animes), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -19,7 +17,4 @@ export async function GET() {
       }
     );
   }
-}
-function getBooks(arg0: SupabaseClient<any, "public", "public", any, any>) {
-  throw new Error("Function not implemented.");
 }
