@@ -30,6 +30,7 @@ O projeto foi desenvolvido com **Next.js App Router**, **Server Actions** e **Su
 * **Tailwind CSS**
 * **Radix UI**
 * **Lucide Icons**
+* **ShadCN**
 
 ### Backend / Infra
 
