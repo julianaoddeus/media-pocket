@@ -143,19 +143,7 @@ export default function LoginPage() {
                     Cadastre-se
                   </Link>
                 </div>
-
-                <div className="pt-4 border-t border-border">
-                  <p className="text-xs text-muted-foreground text-center">
-                    Credenciais de teste: <br />
-                    Email:{" "}
-                    <span className="text-foreground font-mono">
-                      demo@exemplo.com
-                    </span>{" "}
-                    <br />
-                    Senha:{" "}
-                    <span className="text-foreground font-mono">demo123</span>
-                  </p>
-                </div>
+                
               </form>
             </CardContent>
           </Card>
