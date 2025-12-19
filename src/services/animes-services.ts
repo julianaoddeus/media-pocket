@@ -1,8 +1,9 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
-
 export async function getAnimes() {
-  const { data: animes, error } = await supabaseAdmin.from("animes").select("*");
+  const { data: animes, error } = await supabaseAdmin
+    .from("animes")
+    .select("*");
 
   if (error) {
     console.error(error);
@@ -15,7 +16,7 @@ export async function getAnimes() {
   }));
 }
 
-export async function getanime(id: string) {
+export async function getAnime(id: string) {
   if (
     !id ||
     String(id).trim() === "" ||

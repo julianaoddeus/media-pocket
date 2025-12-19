@@ -3,27 +3,26 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/_components/header";
-import { getBook, getBooks } from "@/services/books-services";
+import { getMovie, getMovies } from "@/services/movies-services";
 
 export async function generateStaticParams() {
-  const books = await getBooks();
-  return books.map((book) => ({
-    id: book.id,
+  const movies = await getMovies();
+  return movies.map((movie) => ({
+    id: movie.id,
   }));
 }
 
-
 export const dynamic = "force-static";
 
-export default async function BookDetailPage({
+export default async function movieDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
   const { id } = await params;
-  const book = await getBook(id);
+  const movie = await getMovie(id);
 
-  if (!book) {
+  if (!movie) {
     notFound();
   }
 
@@ -31,7 +30,7 @@ export default async function BookDetailPage({
     <div className="min-h-screen">
       <Header />
       <main className="container mx-auto px-4 py-12">
-        <Link href="/books">
+        <Link href="/movies">
           <Button variant="ghost" className="gap-2 mb-6">
             <ArrowLeft className="w-4 h-4" />
             Voltar para Livros
@@ -42,8 +41,8 @@ export default async function BookDetailPage({
           <div className="space-y-4">
             <div className="w-70 h-100 overflow-hidden rounded-xl bg-muted">
               <img
-                src={book.cover || "/placeholder.svg"}
-                alt={book.title}
+                src={movie.poster || "/placeholder.svg"}
+                alt={movie.title}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -53,7 +52,7 @@ export default async function BookDetailPage({
                 <Star
                   key={i}
                   className={`w-5 h-5 ${
-                    i < book.rating ? "fill-accent text-accent" : "text-muted"
+                    i < movie.rating ? "fill-accent text-accent" : "text-muted"
                   }`}
                 />
               ))}
@@ -63,18 +62,18 @@ export default async function BookDetailPage({
           <div className="space-y-6">
             <div>
               <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-                {book.title}
+                {movie.title}
               </h1>
 
               <div className="flex flex-wrap gap-4 text-muted-foreground mb-6">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4" />
-                  <span>{book.author}</span>
+                  <span>{movie.studio}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   <span>
-                    {new Date(book.createdAt).toLocaleDateString("pt-BR")}
+                    {new Date(movie.createdAt).toLocaleDateString("pt-BR")}
                   </span>
                 </div>
               </div>
@@ -85,7 +84,7 @@ export default async function BookDetailPage({
                 Sinopse
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                {book.description}
+                {movie.description}
               </p>
             </div>
 
