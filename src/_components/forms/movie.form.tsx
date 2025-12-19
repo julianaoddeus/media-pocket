@@ -1,43 +1,55 @@
+import { AddMovie } from "@/app/actions/add-movies";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Star } from "lucide-react";
+import { useState } from "react";
 
 export function MovieForm() {
+  const [rating, setRating] = useState(5);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Adicionar Novo Filme</CardTitle>
       </CardHeader>
       <CardContent>
-        <form className="space-y-6">
+        <form
+          action={async (formData) => {
+            await AddMovie(formData);
+          }}
+          className="space-y-6"
+        >
+          <input type="hidden" name="type" value="movie" />
+          <input type="hidden" name="rating" value="5" />
+
           <div className="space-y-2">
-            <Label htmlFor="movie-title">Título *</Label>
+            <Label htmlFor="title">Título *</Label>
             <Input
-              id="movie-title"
-              
+              id="title"
+              name="title"
               placeholder="Ex:Inception"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="movie-title">Diretor *</Label>
+            <Label htmlFor="director">Diretor *</Label>
             <Input
               id="director"
-              
+              name="director"
               placeholder="Ex: Christopher Nolan"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="movie-description">Descrição *</Label>
+            <Label htmlFor="description">Descrição *</Label>
             <Textarea
-              id="movie-description"
-              
+              id="description"
+              name="description"
               placeholder="Conte-nos sobre este filme..."
               rows={4}
               required
@@ -48,9 +60,9 @@ export function MovieForm() {
             <Label htmlFor="poster">URL do Poster (opcional)</Label>
             <Input
               id="poster"
+              name="poster"
               type="url"
-              
-              placeholder="https://exemplo.com/poster.jpg"
+              placeholder="https://picsum.photos/seed/movie/400/600"
             />
           </div>
 
@@ -61,9 +73,16 @@ export function MovieForm() {
                 <button
                   key={value}
                   type="button"
+                  onClick={() => setRating(value)}
                   className="transition-transform hover:scale-110"
                 >
-                  <Star className={`w-8 h-8 fill-accent text-accent`} />
+                  <Star
+                    className={`w-8 h-8 ${
+                      value <= rating
+                        ? "fill-accent text-accent"
+                        : "text-muted-foreground"
+                    }`}
+                  />
                 </button>
               ))}
             </div>
